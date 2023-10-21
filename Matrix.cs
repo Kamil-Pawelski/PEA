@@ -2,8 +2,8 @@ namespace ATSP
 {
     public class Matrix
     {
-        private readonly int _size;
         private int[,] _matrix;
+        private int _size;
 
         public Matrix(int size, int[,] matrix)
         {
@@ -19,7 +19,7 @@ namespace ATSP
 
         public int Size
         {
-            get;
+            get { return _size; }
         }
 
         public int GetWeight(int a, int b)
