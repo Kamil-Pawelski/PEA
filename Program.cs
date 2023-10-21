@@ -9,7 +9,7 @@
             for (int i = 0; i < 10; i++)
             {
                 BruteForceSearch bruteForceSearch = new BruteForceSearch(matrix, i);
-                bruteForceSearch.Start();
+                bruteForceSearch.Search();
 
             }
 
@@ -17,7 +17,7 @@
             for (int i = 0; i < 10; i++)
             {
                 BruteForceSearch bruteForceSearch1 = new BruteForceSearch(matrix1, i);
-                bruteForceSearch1.Start();
+                bruteForceSearch1.Search();
             }
 
         }

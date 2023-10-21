@@ -17,7 +17,7 @@ namespace ATSP
         }
 
 
-        public void Start()
+        public void Search()
         {
             int minPath = int.MaxValue;
             int[] minPermutation = new int[_matrix.Size - 1];
