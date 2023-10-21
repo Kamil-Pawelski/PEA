@@ -24,17 +24,36 @@ namespace ATSP
 
             // Inicjalizacja pierwszej permutacji (z wyłączeniem wierzchołka startowego)
             _permutation = Enumerable.Range(0, _matrix.Size).Where(i => i != _vertex).ToArray();
+
             do
             {
-
                 int currentPathLen = CalculatePathLength();
                 if (currentPathLen < minPath)
                 {
                     minPath = currentPathLen;
                     Array.Copy(_permutation, minPermutation, _permutation.Length);
                 }
-            } while (GetNextPermutation());
 
+                // Jak o jeden miejsce dalej jest mniejszy od nastepnego 
+                int lastIncreasing = _permutation.Length - 2;
+                while (lastIncreasing >= 0 && _permutation[lastIncreasing] >= _permutation[lastIncreasing + 1])
+                {
+                    lastIncreasing--;
+                }
+
+                if (lastIncreasing < 0) break;  // Jak nie ma to zakończ pętlę do-while
+
+                // Znajdowanie najmniejszieszego elementu w sekcji, który jest większy niż element pod indeksem lastIncreasing
+                int element = Array.FindLastIndex(_permutation, x => x > _permutation[lastIncreasing]);
+
+                // Zamiana miejscami
+                int temp = _permutation[lastIncreasing];
+                _permutation[lastIncreasing] = _permutation[element];
+                _permutation[element] = temp;
+
+                Array.Reverse(_permutation, lastIncreasing + 1, _permutation.Length - lastIncreasing - 1);
+
+            } while (true);
 
             PrintResult(minPermutation, minPath);
         }
@@ -42,42 +61,16 @@ namespace ATSP
 
         private int CalculatePathLength()
         {
-            int totalLength = 0;
+            int total = 0;
             int prev = _vertex;
-            //Iteruje przez każdy wierzchołek i sumuje wagi
-            foreach (var t in _permutation)
+
+            for (int i = 0; i < _permutation.Length; i++)
             {
-                totalLength += _matrix.GetWeight(prev, t);
-                prev = t;
+                total += _matrix.GetWeight(prev, _permutation[i]);
+                prev = _permutation[i];
             }
 
-            // Dodaj wagę krawędzi powrotnej do wierzchołka startowego
-            return totalLength + _matrix.GetWeight(prev, _vertex);
-        }
-
-        private bool GetNextPermutation()
-        {
-            // Jak o jeden miejsce dalej jest mniejszy od nastepnego 
-            int lastIncreasing = _permutation.Length - 2;
-            while (lastIncreasing >= 0 && _permutation[lastIncreasing] >= _permutation[lastIncreasing + 1])
-            {
-                lastIncreasing--;
-            }
-
-            if (lastIncreasing < 0) return false; //jak nie ma to zwraca fałsz
-
-            // Znajdź najmniejszy element w spadającej sekcji, który jest większy niż element pod indeksem lastIncreasing
-            int element = Array.FindLastIndex(_permutation, x => x > _permutation[lastIncreasing]);
-
-            // Zamień miejscami te dwa elementy
-            int temp = _permutation[lastIncreasing];
-            _permutation[lastIncreasing] = _permutation[element];
-            _permutation[element] = temp;
-
-
-            Array.Reverse(_permutation, lastIncreasing + 1, _permutation.Length - lastIncreasing - 1);
-
-            return true;
+            return total + _matrix.GetWeight(prev, _vertex);
         }
 
 

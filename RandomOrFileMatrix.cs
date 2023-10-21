@@ -30,22 +30,22 @@ namespace ATSP
                 _dimension = Convert.ToInt32(lines[3].Split(": ")[1]);
                 MatrixFileInfo(fileName);
                 var matrixData = lines.Skip(7).ToArray();
-                int currentRow = 0;
-                int currentCol = 0;
+                int row = 0;
+                int column = 0;
                 var fileMatrix = new int[_dimension, _dimension];
                 for (int i = 0; i < matrixData.Length && matrixData[i] != "EOF"; i++)
                 {
                     var lineData = matrixData[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    foreach (var s in lineData)
+                    foreach (var number in lineData)
                     {
-                        fileMatrix[currentRow, currentCol] = int.Parse(s);
-                        currentCol++;
+                        fileMatrix[row, column] = int.Parse(number);
+                        column++;
 
-                        if (currentCol == _dimension)
+                        if (column == _dimension)
                         {
-                            currentCol = 0;
-                            currentRow++;
+                            column = 0;
+                            row++;
                         }
                     }
                 }
