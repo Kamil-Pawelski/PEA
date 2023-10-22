@@ -13,13 +13,13 @@
 
             }
 
-            Matrix matrix1 = filesReader.GenerateRandomGraph(10);
-            for (int i = 0; i < 10; i++)
-            {
-                BruteForceSearch bruteForceSearch1 = new BruteForceSearch(matrix1, i);
-                bruteForceSearch1.Search();
-            }
-
+            Matrix matrix1 = filesReader.GenerateRandomGraph(100);
+            // for (int i = 0; i < 10; i++)
+            // {
+            //     BruteForceSearch bruteForceSearch1 = new BruteForceSearch(matrix1, i);
+            //     bruteForceSearch1.Search();
+            // }
+            //matrix1.Print();
         }
     }
 }

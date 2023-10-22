@@ -1,4 +1,5 @@
-using System.Text;
+using System;
+using System.Linq;
 
 namespace ATSP
 {
@@ -7,72 +8,101 @@ namespace ATSP
         private Matrix _matrix;
         private int _vertex;
         private int[] _permutation;
-
+        private int[] _bestPermutation;
+        private int _minPathLength;
 
         public BruteForceSearch(Matrix matrix, int vertex)
         {
             _matrix = matrix;
             _vertex = vertex;
-            _permutation = new int[_matrix.Size - 1];
+            _permutation = Enumerable.Range(0, _matrix.Size).Where(i => i != _vertex).ToArray();
+            _bestPermutation = new int[_matrix.Size - 1];
+            _minPathLength = int.MaxValue;
         }
 
+        private bool IsLastPermutation()
+        {
+            for (int i = 0; i < _permutation.Length - 1; i++)
+            {
+                if (_permutation[i] < _permutation[i + 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void GenerateNextPermutation()
+        {
+            int lastIncreasing = -1;
+            for (int i = _permutation.Length - 2; i >= 0; i--)
+            {
+                if (_permutation[i] < _permutation[i + 1])
+                {
+                    lastIncreasing = i;
+                    break;
+                }
+            }
+
+            if (lastIncreasing == -1) return;
+
+            int swapWith = -1;
+            for (int i = _permutation.Length - 1; i > lastIncreasing; i--)
+            {
+                if (_permutation[i] > _permutation[lastIncreasing])
+                {
+                    swapWith = i;
+                    break;
+                }
+            }
+
+            Swap(ref _permutation[lastIncreasing], ref _permutation[swapWith]);
+            Array.Reverse(_permutation, lastIncreasing + 1, _permutation.Length - lastIncreasing - 1);
+        }
 
         public void Search()
         {
-            int minPath = int.MaxValue;
-            int[] minPermutation = new int[_matrix.Size - 1];
-
-            // Inicjalizacja pierwszej permutacji (z wyłączeniem wierzchołka startowego)
-            _permutation = Enumerable.Range(0, _matrix.Size).Where(i => i != _vertex).ToArray();
-
             do
             {
                 int currentPathLen = CalculatePathLength();
-                if (currentPathLen < minPath)
+                if (currentPathLen < _minPathLength)
                 {
-                    minPath = currentPathLen;
-                    Array.Copy(_permutation, minPermutation, _permutation.Length);
+                    _minPathLength = currentPathLen;
+                    Array.Copy(_permutation, _bestPermutation, _permutation.Length);
                 }
 
-                // Jak o jeden miejsce dalej jest mniejszy od nastepnego 
-                int lastIncreasing = _permutation.Length - 2;
-                while (lastIncreasing >= 0 && _permutation[lastIncreasing] >= _permutation[lastIncreasing + 1])
-                {
-                    lastIncreasing--;
-                }
+                if (IsLastPermutation()) break;
 
-                if (lastIncreasing < 0) break;  // Jak nie ma to zakończ pętlę do-while
-
-                // Znajdowanie najmniejszieszego elementu w sekcji, który jest większy niż element pod indeksem lastIncreasing
-                int element = Array.FindLastIndex(_permutation, x => x > _permutation[lastIncreasing]);
-
-                // Zamiana miejscami
-                int temp = _permutation[lastIncreasing];
-                _permutation[lastIncreasing] = _permutation[element];
-                _permutation[element] = temp;
-
-                Array.Reverse(_permutation, lastIncreasing + 1, _permutation.Length - lastIncreasing - 1);
+                GenerateNextPermutation();
 
             } while (true);
 
-            PrintResult(minPermutation, minPath);
+            PrintResult(_bestPermutation, _minPathLength);
         }
 
+
+
+        private void Swap(ref int a, ref int b)
+        {
+            int tmp = a;
+            a = b;
+            b = tmp;
+        }
 
         private int CalculatePathLength()
         {
-            int total = 0;
-            int prev = _vertex;
+            int total = _vertex;
+            int sum = 0;
 
             for (int i = 0; i < _permutation.Length; i++)
             {
-                total += _matrix.GetWeight(prev, _permutation[i]);
-                prev = _permutation[i];
+                sum += _matrix.GetWeight(total, _permutation[i]);
+                total = _permutation[i];
             }
 
-            return total + _matrix.GetWeight(prev, _vertex);
+            sum += _matrix.GetWeight(total, _vertex);
+            return sum;
         }
-
 
         private void PrintResult(int[] path, int length)
         {
