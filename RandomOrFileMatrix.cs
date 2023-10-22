@@ -28,7 +28,7 @@ namespace ATSP
                 _type = lines[1];
                 _comment = lines[2];
                 _dimension = Convert.ToInt32(lines[3].Split(": ")[1]);
-                MatrixFileInfo(fileName);
+                MatrixFileInfo();
                 var matrixData = lines.Skip(7).ToArray();
                 int row = 0;
                 int column = 0;
@@ -65,7 +65,10 @@ namespace ATSP
         {
             int[,] matrix = new int[dimension, dimension];
             Random random = new Random();
-
+            _fileMatrixName = "NAME: Wygenerowany";
+            _type = "TYPE: ATSP";
+            _comment = "COMMENT:  Asymmetric TSP (Fischetti) for DIMENSION " + dimension;
+            _dimension = dimension;
             for (int i = 0; i < dimension; i++)
             {
                 for (int j = 0; j < dimension; j++)
@@ -83,10 +86,10 @@ namespace ATSP
 
             return new Matrix(dimension, matrix);
         }
-        private void MatrixFileInfo(string fileName)
+        public void MatrixFileInfo()
         {
 
-            Console.WriteLine($"NAME: {fileName.Split('\\')[1].Split('.')[0]}\n{_type}\n{_comment}\nDIMENSION: {_dimension}");
+            Console.WriteLine($"{_fileMatrixName}\n{_type}\n{_comment}\nDIMENSION: {_dimension}");
         }
     }
 }
