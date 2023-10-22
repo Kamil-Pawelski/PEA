@@ -28,7 +28,6 @@ namespace ATSP
                 _type = lines[1];
                 _comment = lines[2];
                 _dimension = Convert.ToInt32(lines[3].Split(": ")[1]);
-                MatrixFileInfo();
                 var matrixData = lines.Skip(7).ToArray();
                 int row = 0;
                 int column = 0;
@@ -39,7 +38,7 @@ namespace ATSP
 
                     foreach (var number in lineData)
                     {
-                        fileMatrix[row, column] = int.Parse(number);
+                        fileMatrix[row, column] = Convert.ToInt32(number);
                         column++;
 
                         if (column == _dimension)
@@ -57,7 +56,6 @@ namespace ATSP
             {
                 Console.Error.WriteLine(exception.Message);
             }
-
             return null;
         }
 

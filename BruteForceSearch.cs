@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-
+using System.Diagnostics;
 namespace ATSP
 {
     class BruteForceSearch
@@ -62,6 +61,8 @@ namespace ATSP
 
         public void Search()
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             do
             {
                 int currentPathLen = CalculatePathLength();
@@ -76,8 +77,25 @@ namespace ATSP
                 GenerateNextPermutation();
 
             } while (true);
+            stopwatch.Stop();
+            var elapsedTime = stopwatch.ElapsedMilliseconds;
+            PrintResult(_bestPermutation, _minPathLength, elapsedTime);
+            string filePath = "wyniki.csv";
+            string delimiter = ";";
+            string newLine = Environment.NewLine;
 
-            PrintResult(_bestPermutation, _minPathLength);
+            // Jeśli plik nie istnieje, dodaj nagłówek
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, $"Operacja{delimiter}Czas (ms){newLine}");
+            }
+
+            // Dopisz wynik do pliku
+            File.AppendAllText(filePath, $"Wynik{delimiter}{elapsedTime}{newLine}");
+
+            _permutation = Enumerable.Range(0, _matrix.Size).Where(i => i != _vertex).ToArray();
+            _bestPermutation = new int[_matrix.Size - 1];
+            _minPathLength = int.MaxValue;
         }
 
 
@@ -104,9 +122,9 @@ namespace ATSP
             return sum;
         }
 
-        private void PrintResult(int[] path, int length)
+        private void PrintResult(int[] path, int length, long elapsedTime)
         {
-            Console.WriteLine($"Scieżka: {_vertex} {string.Join(" ", path)} {_vertex}\t Odległość: {length}.");
+            Console.WriteLine($"Scieżka: {_vertex} {string.Join(" ", path)} {_vertex}\t\tOdległość: {length}.\tCzas potrzebny do wykonania: {elapsedTime}(ms)");
         }
     }
 }
