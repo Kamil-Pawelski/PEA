@@ -1,12 +1,15 @@
 ﻿namespace ATSP
 {
-    class Program
+    class Menu
     {
+        /// <summary>
+        /// Menu 
+        /// </summary>
         public static void Main()
         {
             RandomOrFileMatrix randomOrFileMatrix = new RandomOrFileMatrix();
-            Matrix matrix = null;
-            BruteForceSearch bruteForceSearch = null;
+            Matrix? matrix = null;
+            BruteForceSearch? bruteForceSearch = null;
             int choice = default;
             int algorithmChoice = default;
             do
@@ -27,13 +30,17 @@
                         break;
                     case 3:
                         System.Console.WriteLine("Proszę podać wymiar macierzy do wygenerowania: ");
-                        matrix = randomOrFileMatrix.GenerateRandomGraph(Convert.ToInt32(Console.ReadLine()));
+                        matrix = randomOrFileMatrix.GenerateRandomMatrix(Convert.ToInt32(Console.ReadLine()));
                         break;
                     case 4:
                         if (matrix != null)
                             randomOrFileMatrix.MatrixFileInfo();
                         break;
                     case 5:
+                        if (matrix != null)
+                            matrix.Print();
+                        break;
+                    case 6:
                         if (matrix != null)
                         {
                             AlgorithmMenu();
@@ -49,7 +56,7 @@
 
                         }
                         break;
-                    case 6:
+                    case 7:
                         if (matrix != null)
                         {
                             AlgorithmMenu();
@@ -73,7 +80,7 @@
 
                         }
                         break;
-                    case 7:
+                    case 8:
                         System.Console.WriteLine("Koniec działania programu.");
                         break;
                     default:
@@ -81,12 +88,19 @@
                         break;
                 }
                 System.Console.WriteLine();
-            } while (choice != 7);
+            } while (choice != 8);
         }
+        /// <summary>
+        /// Główne menu
+        /// </summary>
         public static void MainMenu()
         {
-            System.Console.WriteLine("Wybierz opcję:\n1. Wczytaj dane z pliku (Podanie nazwy pliku).\t2. Wczytaj dane z pliku (Podanie całej ścieżki do pliku).\n3. Wygeneruj losowe dane.\t\t\t4. Wyświetl ostatnio wczytane dane.\n5. Uruchom wybrany algorytm\t\t\t6. Testy\n7. Wyjście z programu");
+            System.Console.WriteLine("Wybierz opcję:\n1. Wczytaj dane z pliku (Podanie nazwy pliku).\t2. Wczytaj dane z pliku (Podanie całej ścieżki do pliku).\n3. Wygeneruj losowe dane.\t\t\t4. Wyświetl ostatnio wczytane dane.");
+            System.Console.WriteLine("5. Wypisz macierz\t\t\t\t6. Uruchom wybrany algorytm\n7. Uruchom wybrany algorytm x razy.\t\t8. Wyjście z programu");
         }
+        /// <summary>
+        /// Menu z wyborem algorytmów
+        /// </summary>
         public static void AlgorithmMenu()
         {
             System.Console.WriteLine("Wybierz opcję:\n1. Przegląd zupełny.");

@@ -11,7 +11,9 @@ namespace ATSP
         private string _comment;
         private int _dimension;
         private string _fileMatrixName;
-
+        /// <summary>
+        /// Konstruktor domyślne pola
+        /// </summary>
         public RandomOrFileMatrix()
         {
             _type = default;
@@ -19,6 +21,11 @@ namespace ATSP
             _dimension = default;
             _fileMatrixName = default;
         }
+        /// <summary>
+        /// Wczytawanie danych z pliku
+        /// </summary>
+        /// <param name="fileName">Nazwa pliku</param>
+        /// <returns></returns>
         public Matrix ReadFile(string fileName)
         {
             try
@@ -27,14 +34,14 @@ namespace ATSP
                 _fileMatrixName = lines[0];
                 _type = lines[1];
                 _comment = lines[2];
-                _dimension = Convert.ToInt32(lines[3].Split(": ")[1]);
-                var matrixData = lines.Skip(7).ToArray();
+                _dimension = Convert.ToInt32(lines[3].Split(": ")[1]); // Dzielimy napis DIMENSION: X (gdzie x to liczba) na dwie i bierzemy tylko liczbe którą zmieniamy na inta
+                var matrixData = lines.Skip(7).ToArray(); // Pomijamy pierwsze 7 linijek
                 int row = 0;
                 int column = 0;
                 var fileMatrix = new int[_dimension, _dimension];
-                for (int i = 0; i < matrixData.Length && matrixData[i] != "EOF"; i++)
+                for (int i = 0; i < matrixData.Length && matrixData[i] != "EOF"; i++) //Pętla wypełniająca macierz
                 {
-                    var lineData = matrixData[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var lineData = matrixData[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries); //Dzielimy po spacjach a StringSplitOptions.RemoveEmptyEntries wyeliminuje nam niepotrzebne ciągi w tablicy
 
                     foreach (var number in lineData)
                     {
@@ -59,7 +66,12 @@ namespace ATSP
             return null;
         }
 
-        public Matrix GenerateRandomGraph(int dimension)
+        /// <summary>
+        /// Generowanie własnej macierzy
+        /// </summary>
+        /// <param name="dimension"></param>
+        /// <returns></returns>
+        public Matrix GenerateRandomMatrix(int dimension)
         {
             int[,] matrix = new int[dimension, dimension];
             Random random = new Random();
@@ -84,6 +96,10 @@ namespace ATSP
 
             return new Matrix(dimension, matrix);
         }
+
+        /// <summary>
+        /// Wypisanie informacji na temat macierzy
+        /// </summary>
         public void MatrixFileInfo()
         {
 
