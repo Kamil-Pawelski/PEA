@@ -19,7 +19,7 @@
                 switch (choice)
                 {
                     case 1:
-                        System.Console.WriteLine("Proszę podać nazwę pliku: ");
+                        System.Console.WriteLine("Proszę podać nazwę pliku z folderu files: ");
                         var fileName = Console.ReadLine();
                         matrix = randomOrFileMatrix.ReadFile(@"files\" + fileName);
                         break;
@@ -95,7 +95,7 @@
         /// </summary>
         public static void MainMenu()
         {
-            System.Console.WriteLine("Wybierz opcję:\n1. Podaj nazwę pliku (Jeśli uruchamiamy z głównego folderu).\t2. Podaj ścieżkę do pliku (Jeśli uruchamiamy w visual studio lub znajduję sie poza głównym folderem).\n3. Wygeneruj losowe dane.\t\t4. Wyświetl ostatnio wczytane dane.");
+            System.Console.WriteLine("Wybierz opcję:\n1. Podaj nazwę pliku (Jeśli uruchamiamy z głównego folderu przy pomocy dotnet run).\n2. Podaj ścieżkę do pliku.\n3. Wygeneruj losowe dane.\t\t4. Wyświetl ostatnio wczytane dane.");
             System.Console.WriteLine("5. Wypisz macierz\t\t\t6. Uruchom wybrany algorytm\n7. Uruchom wybrany algorytm x razy.\t8. Wyjście z programu");
         }
         /// <summary>

@@ -1,0 +1,12 @@
+NAME: ftv4
+TYPE: ATSP
+COMMENT: Asymmetric TSP (Fischetti) for DIMENSION 10
+DIMENSION: 4
+EDGE_WEIGHT_TYPE: EXPLICIT
+EDGE_WEIGHT_FORMAT: FULL_MATRIX 
+EDGE_WEIGHT_SECTION
+   -1         5         7         13         
+          12   -1        2         9          
+          1         13   -1        3         
+          20         4         11   -1     
+EOF
