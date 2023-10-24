@@ -95,8 +95,8 @@
         /// </summary>
         public static void MainMenu()
         {
-            System.Console.WriteLine("Wybierz opcję:\n1. Wczytaj dane z pliku (Podanie nazwy pliku).\t2. Wczytaj dane z pliku (Podanie całej ścieżki do pliku).\n3. Wygeneruj losowe dane.\t\t\t4. Wyświetl ostatnio wczytane dane.");
-            System.Console.WriteLine("5. Wypisz macierz\t\t\t\t6. Uruchom wybrany algorytm\n7. Uruchom wybrany algorytm x razy.\t\t8. Wyjście z programu");
+            System.Console.WriteLine("Wybierz opcję:\n1. Podaj nazwę pliku (Jeśli uruchamiamy z głównego folderu).\t2. Podaj ścieżkę do pliku (Jeśli uruchamiamy w visual studio lub znajduję sie poza głównym folderem).\n3. Wygeneruj losowe dane.\t\t4. Wyświetl ostatnio wczytane dane.");
+            System.Console.WriteLine("5. Wypisz macierz\t\t\t6. Uruchom wybrany algorytm\n7. Uruchom wybrany algorytm x razy.\t8. Wyjście z programu");
         }
         /// <summary>
         /// Menu z wyborem algorytmów
