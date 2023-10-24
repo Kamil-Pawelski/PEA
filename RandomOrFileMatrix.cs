@@ -16,17 +16,17 @@ namespace ATSP
         /// </summary>
         public RandomOrFileMatrix()
         {
-            _type = default;
-            _comment = default;
+            _type = string.Empty;
+            _comment = string.Empty;
             _dimension = default;
-            _fileMatrixName = default;
+            _fileMatrixName = string.Empty;
         }
         /// <summary>
         /// Wczytawanie danych z pliku
         /// </summary>
         /// <param name="fileName">Nazwa pliku</param>
         /// <returns></returns>
-        public Matrix ReadFile(string fileName)
+        public Matrix? ReadFile(string fileName)
         {
             try
             {
