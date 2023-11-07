@@ -28,22 +28,6 @@ namespace ATSP
             _bestPermutation = new int[_matrix.Size - 1];
             _minPathLength = int.MaxValue;
         }
-        /// <summary>
-        /// Inicjalizacja pewnych pól klasy na nowo.
-        /// </summary>
-        private void Initialize() 
-        {
-            List<int> permutation = new List<int>(); 
-            for (int i = 0; i < _matrix.Size; i++)
-            {
-                if (i != _vertex)
-                    permutation.Add(i);
-            }
-            _permutation = permutation.ToArray();
-            _bestPermutation = new int[_matrix.Size - 1];
-            _minPathLength = int.MaxValue;
-        }
-
 
         /// <summary>
         /// Metoda umożliwiająca wykonanie przeglądu zupełnego
@@ -74,7 +58,6 @@ namespace ATSP
 
             SaveResultToFile(elapsedTime);
 
-           // Initialize();
         }
         /// <summary>
         /// Zapisuje dla danego rozmiaru macierzy czas potrzebny do wykonania 

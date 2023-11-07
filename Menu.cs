@@ -12,17 +12,17 @@ namespace ATSP
         {
             RandomOrFileMatrix randomOrFileMatrix = new RandomOrFileMatrix();
 
-            string choice = default;
+            string choice = string.Empty;
             do
             {
                 MainMenu();
-                choice = Console.ReadLine();
+                choice = Console.ReadLine() ?? string.Empty;
                 switch (choice)
                 {
                     case "1":
                         System.Console.WriteLine("Proszę podać pełną ścieżke pliku: ");
                         // Przykładowa ścieżka pliku, zastąp ścieżką do własnego pliku
-                        matrix = randomOrFileMatrix.ReadFile(Console.ReadLine());
+                        matrix = randomOrFileMatrix.ReadFile(Console.ReadLine() ?? string.Empty);
 
                         break;
                     case "2":
