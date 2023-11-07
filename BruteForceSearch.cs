@@ -19,7 +19,22 @@ namespace ATSP
             _matrix = matrix;
             _vertex = vertex;
             List<int> permutation = new List<int>();
-            for (int i = 0; i < _matrix.Size; i++) // Dodawanie wierzchołków bez wybranego
+            for (int i = 0; i < _matrix.Size; i++)
+            {
+                if (i != _vertex)
+                    permutation.Add(i);
+            }
+            _permutation = permutation.ToArray();
+            _bestPermutation = new int[_matrix.Size - 1];
+            _minPathLength = int.MaxValue;
+        }
+        /// <summary>
+        /// Inicjalizacja pewnych pól klasy na nowo.
+        /// </summary>
+        private void Initialize() 
+        {
+            List<int> permutation = new List<int>(); 
+            for (int i = 0; i < _matrix.Size; i++)
             {
                 if (i != _vertex)
                     permutation.Add(i);
@@ -29,6 +44,7 @@ namespace ATSP
             _minPathLength = int.MaxValue;
         }
 
+
         /// <summary>
         /// Metoda umożliwiająca wykonanie przeglądu zupełnego
         /// </summary>
@@ -36,6 +52,7 @@ namespace ATSP
         {
             var stopwatch = new Stopwatch(); //mierzenie czasu
             stopwatch.Start();
+
             do
             {
                 int currentPathLen = CalculatePathLength(); //obliczanie ścieżki
@@ -49,32 +66,21 @@ namespace ATSP
 
                 GenerateNextPermutation(); //generowanie kolejnej permutacji w innym wypadku
             } while (true);
+
             stopwatch.Stop();
             double elapsedTime = stopwatch.Elapsed.TotalMilliseconds;
+
             PrintResult(_bestPermutation, _minPathLength, elapsedTime);
-            string filePath = "wyniki.csv";
-            string delimiter = ";";
-            string newLine = Environment.NewLine;
 
+            SaveResultToFile(elapsedTime);
 
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, $"Operacja{delimiter}Czas (ms){newLine}");
-            }
-
-
-            File.AppendAllText(filePath, $"Wynik{_matrix.Size}{delimiter}{elapsedTime}{newLine}");
-
-            List<int> permutation = new List<int>(); //ponowna inicjalizacja pól
-            for (int i = 0; i < _matrix.Size; i++)
-            {
-                if (i != _vertex)
-                    permutation.Add(i);
-            }
-            _permutation = permutation.ToArray();
-            _bestPermutation = new int[_matrix.Size - 1];
-            _minPathLength = int.MaxValue;
+           // Initialize();
         }
+        /// <summary>
+        /// Zapisuje dla danego rozmiaru macierzy czas potrzebny do wykonania 
+        /// </summary>
+        /// <param name="elapsedTime"></param>
+    
 
         /// <summary>
         /// Sprawdzenie czy mamy jeszcze permutacje do wykonania
@@ -91,7 +97,6 @@ namespace ATSP
             }
             return true;
         }
-
         /// <summary>
         /// Generowanie kolejnej permutacji
         /// </summary>
@@ -123,6 +128,24 @@ namespace ATSP
             Swap(ref _permutation[swapStart], ref _permutation[swapWith]); // Zamieniami miejscami elementy znalezione
             Array.Reverse(_permutation, swapStart + 1, _permutation.Length - swapStart - 1); // Odwrócenie części tablicy do uzyskania prawidłowej kolejności
         }
+        /// <summary>
+        /// Zapisanie wyników do pliku
+        /// </summary>
+        /// <param name="elapsedTime">Czas wykonania operacji</param>
+        private void SaveResultToFile(double elapsedTime)
+        {
+            string filePath = "wyniki.csv";
+            string delimiter = ";";
+            string newLine = Environment.NewLine;
+
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, $"Operacja{delimiter}Czas (ms){newLine}");
+            }
+
+            File.AppendAllText(filePath, $"Wynik{_matrix.Size}{delimiter}{elapsedTime}{newLine}");
+        }
+
 
         /// <summary>
         ///  Zamienienie elementów miedzy sobą
@@ -131,9 +154,7 @@ namespace ATSP
         /// <param name="b"> Drugi element do zamiany</param>
         private void Swap(ref int a, ref int b)
         {
-            int tmp = a;
-            a = b;
-            b = tmp;
+            (a, b) = (b, a);
         }
 
         /// <summary>
@@ -161,9 +182,7 @@ namespace ATSP
         /// <param name="path">Ścieżka przez którą się przeszło</param>
         /// <param name="length">Odgległość</param>
         /// <param name="elapsedTime">Czas potrzebny do wykonania</param>
-        private void PrintResult(int[] path, int length, double elapsedTime)
-        {
-            Console.WriteLine($"Scieżka: {_vertex} {string.Join(" ", path)} {_vertex}\t\tOdległość: {length}.\tCzas potrzebny do wykonania: {elapsedTime}(ms)");
-        }
+        private void PrintResult(int[] path, int length, double elapsedTime) => Console.WriteLine($"Scieżka: {_vertex} {string.Join(" ", path)} {_vertex}\t\t" +
+                                                                                                  $"Odległość: {length}.\tCzas potrzebny do wykonania: {elapsedTime}(ms)");
     }
 }

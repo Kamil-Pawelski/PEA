@@ -1,86 +1,50 @@
-﻿namespace ATSP
+﻿
+namespace ATSP
 {
     class Menu
     {
+       
+        private static Matrix? matrix = null;
         /// <summary>
         /// Menu 
         /// </summary>
         public static void Main()
         {
             RandomOrFileMatrix randomOrFileMatrix = new RandomOrFileMatrix();
-            Matrix? matrix = null;
-            BruteForceSearch? bruteForceSearch = null;
-            int choice = default;
-            int algorithmChoice = default;
+
+            string choice = default;
             do
             {
                 MainMenu();
-                choice = Convert.ToInt32(Console.ReadLine());
+                choice = Console.ReadLine();
                 switch (choice)
                 {
-                    case 1:
-                        System.Console.WriteLine("Proszę podać nazwę pliku z folderu files: ");
-                        var fileName = Console.ReadLine();
-                        matrix = randomOrFileMatrix.ReadFile(@"files\" + fileName);
-                        break;
-                    case 2:
+                    case "1":
                         System.Console.WriteLine("Proszę podać pełną ścieżke pliku: ");
-                        var pathName = Console.ReadLine() ?? String.Empty;
-                        matrix = randomOrFileMatrix.ReadFile(pathName);
+                        // Przykładowa ścieżka pliku, zastąp ścieżką do własnego pliku
+                        matrix = randomOrFileMatrix.ReadFile(Console.ReadLine());
+
                         break;
-                    case 3:
+                    case "2":
                         System.Console.WriteLine("Proszę podać wymiar macierzy do wygenerowania: ");
                         matrix = randomOrFileMatrix.GenerateRandomMatrix(Convert.ToInt32(Console.ReadLine()));
+
                         break;
-                    case 4:
+                    case "3":
                         if (matrix != null)
                             randomOrFileMatrix.MatrixFileInfo();
                         break;
-                    case 5:
+                    case "4":
                         if (matrix != null)
                             matrix.Print();
                         break;
-                    case 6:
-                        if (matrix != null)
-                        {
-                            AlgorithmMenu();
-                            algorithmChoice = Convert.ToInt32(Console.ReadLine());
-                            switch (algorithmChoice)
-                            {
-                                case 1:
-                                    System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
-                                    bruteForceSearch = new BruteForceSearch(matrix, Convert.ToInt32(Console.ReadLine()));
-                                    bruteForceSearch.Search();
-                                    break;
-                            }
-
-                        }
+                    case "5":
+                        ExecuteAlgorithm();
                         break;
-                    case 7:
-                        if (matrix != null)
-                        {
-                            AlgorithmMenu();
-                            algorithmChoice = Convert.ToInt32(Console.ReadLine());
-                            switch (algorithmChoice)
-                            {
-                                case 1:
-                                    System.Console.WriteLine("Ile iteracji?");
-                                    int loopLenght = Convert.ToInt32(Console.ReadLine());
-                                    System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
-                                    int vertex = Convert.ToInt32(Console.ReadLine());
-                                    bruteForceSearch = new BruteForceSearch(matrix, vertex);
-                                    for (int i = 0; i < loopLenght; i++)
-                                    {
-
-                                        bruteForceSearch.Search();
-                                    }
-
-                                    break;
-                            }
-
-                        }
+                    case "6":
+                        ExecuteAlgorithmMultipleTimes();
                         break;
-                    case 8:
+                    case "7":
                         System.Console.WriteLine("Koniec działania programu.");
                         break;
                     default:
@@ -88,22 +52,87 @@
                         break;
                 }
                 System.Console.WriteLine();
-            } while (choice != 8);
+            } while (choice != "7");
+           
         }
         /// <summary>
         /// Główne menu
         /// </summary>
-        public static void MainMenu()
+        public static void MainMenu() => System.Console.WriteLine("Wybierz opcję:\n" +
+            "1. Podaj ścieżkę do pliku.\t\t2. Wygeneruj losowe dane.\n" +
+            "3. Wyświetl ostatnio wczytane dane.\t4. Wypisz macierz\n" +
+            "5. Uruchom wybrany algorytm\t\t6. Uruchom wybrany algorytm x razy.\n" +
+            "7. Wyjście z programu");
+
+        /// <summary>
+        /// Uruchamia wybrany algorytm raz
+        /// </summary>
+        public static void ExecuteAlgorithm()
         {
-            System.Console.WriteLine("Wybierz opcję:\n1. Podaj nazwę pliku (Jeśli uruchamiamy z głównego folderu przy pomocy dotnet run).\n2. Podaj ścieżkę do pliku.\n3. Wygeneruj losowe dane.\t\t4. Wyświetl ostatnio wczytane dane.");
-            System.Console.WriteLine("5. Wypisz macierz\t\t\t6. Uruchom wybrany algorytm\n7. Uruchom wybrany algorytm x razy.\t8. Wyjście z programu");
+            if (matrix != null)
+            {
+                AlgorithmMenu();
+                string algorithmChoice = Console.ReadLine() ?? string.Empty;
+                switch (algorithmChoice)
+                {
+                    case "1":
+                        System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
+                        BruteForceSearch bruteForceSearch = new BruteForceSearch(matrix, Convert.ToInt32(Console.ReadLine()));
+                        bruteForceSearch.Search();
+                        break;
+                    case "2":
+                        System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
+                        BranchAndBound branchAndBound = new BranchAndBound(matrix, Convert.ToInt32(Console.ReadLine()));
+                        branchAndBound.CalculatePath();
+                        break;
+                }
+            }
+        }
+        /// <summary>
+        /// Uruchamia wybrany algorytm x razy
+        /// </summary>
+        public static void ExecuteAlgorithmMultipleTimes()
+        {
+            if (matrix != null)
+            {
+                AlgorithmMenu();
+                string algorithmChoice = Console.ReadLine() ?? string.Empty;
+                int loopLength;
+                int startVertex;
+                switch (algorithmChoice)
+                {
+                    case "1":
+                        System.Console.WriteLine("Ile iteracji?");
+                        loopLength = Convert.ToInt32(Console.ReadLine());
+                        System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
+                        startVertex = Convert.ToInt32(Console.ReadLine());
+                        BruteForceSearch bruteForceSearch = new BruteForceSearch(matrix, startVertex);
+
+                        for (int i = 0; i < loopLength; i++)
+                        {
+                            bruteForceSearch.Search();
+                            bruteForceSearch = new BruteForceSearch(matrix, startVertex);
+                        }
+                        break;
+                    case "2":
+                        System.Console.WriteLine("Ile iteracji?");
+                        loopLength = Convert.ToInt32(Console.ReadLine());
+                        System.Console.WriteLine("Wskaż, wierzchołek do rozpoczęcia: ");
+                        startVertex = Convert.ToInt32(Console.ReadLine());
+                        BranchAndBound branchAndBound = new BranchAndBound(matrix, startVertex);
+                        for (int i = 0; i < loopLength; i++)
+                        {
+                            branchAndBound.CalculatePath();
+                            branchAndBound = new BranchAndBound(matrix, startVertex);
+                        }
+                        break;
+                        
+                }
+            }
         }
         /// <summary>
         /// Menu z wyborem algorytmów
         /// </summary>
-        public static void AlgorithmMenu()
-        {
-            System.Console.WriteLine("Wybierz opcję:\n1. Przegląd zupełny.");
-        }
+        public static void AlgorithmMenu() => System.Console.WriteLine("Wybierz opcję:\n1. Przegląd zupełny.\t2. Metoda podziału i ograniczeń.");
     }
 }

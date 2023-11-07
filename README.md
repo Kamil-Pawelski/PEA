@@ -3,4 +3,7 @@
 
 Ten projekt został stworzony w ramach zajęć z "Projektowania Efektywnych Algorytmów" na pwr
 
-Utworzony został pierwszy algorytm przeglądu zupełnego.
+Projekt zawiera już implementacji algorytmów:
+
+- Przęgladu zupełnego
+- Metody B&B
