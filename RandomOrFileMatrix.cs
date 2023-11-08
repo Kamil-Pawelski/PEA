@@ -10,6 +10,7 @@ namespace ATSP
 
         private int _dimension;
         private int _result;
+        private int _seed;
     
         public int Dimension
         {
@@ -22,14 +23,20 @@ namespace ATSP
             get => _result;
             set => _result = value;
         }
+        public int Seed
+        {
+            get => _seed;
+            set => _seed = value;
+        }
  
         /// <summary>
         /// Konstruktor domyślne pola
         /// </summary>
-        public RandomOrFileMatrix()
+        public RandomOrFileMatrix(int seed)
         {
             _dimension = default;
             _result = default;
+            _seed = seed;
         }
         /// <summary>
         /// Wczytawanie danych z pliku
@@ -86,7 +93,7 @@ namespace ATSP
         public Matrix GenerateRandomMatrix(int dimension)
         {
             int[,] matrix = new int[dimension, dimension];
-            Random random = new Random();
+            Random random = new(Seed);
             Dimension = dimension;
             for (int i = 0; i < dimension; i++)
             {

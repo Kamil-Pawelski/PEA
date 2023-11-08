@@ -7,10 +7,10 @@ namespace ATSP
 {
     public class BranchAndBound
     {
-        private Matrix _matrix;
+        private readonly Matrix _matrix;
         private int _bestUpperBound;
         private List<int> _bestPath;
-        private int _startVertex;
+        private readonly int _startVertex;
         /// <summary>
         /// Konstruktor obiektu BranchAndBound
         /// </summary>
@@ -30,7 +30,7 @@ namespace ATSP
         {
             var stopwatch = new Stopwatch(); //mierzenie czasu
             stopwatch.Start();
-            Matrix initialMatrix = new Matrix(_matrix.Size, (int[,])_matrix.MatrixData.Clone()); //macież na której będziemy pracować, aby nie nadpisywać poprzedniej (raz zadziała ale dla każde
+            Matrix initialMatrix = new(_matrix.Size, (int[,])_matrix.MatrixData.Clone()); //macież na której będziemy pracować, aby nie nadpisywać poprzedniej (raz zadziała ale dla każde
             int lowerBound = initialMatrix.ReduceRowsAndColumns();
             FindBestTour(_startVertex, lowerBound, new List<int> { _startVertex }, initialMatrix);    
             stopwatch.Stop();
@@ -70,7 +70,7 @@ namespace ATSP
                     int newCost = currentCost + matrix.GetWeight(currentVertex, nextVertex) + reductionCost; //obliczamy koszt z dotychczasowej sciezki + wagi + tego co z redukowaliśmy
                     if (newCost < _bestUpperBound) //jesli mniejszy to obliczony koszt lepszy od
                     {
-                        List<int> newPath = new List<int>(currentPath) { nextVertex }; //dodajemy do nowej listy obecna sciezke plus kolejny wierzcholek
+                        List<int> newPath = new (currentPath) { nextVertex }; //dodajemy do nowej listy obecna sciezke plus kolejny wierzcholek
                         FindBestTour(nextVertex, newCost, newPath, reducedMatrix); //zaczynamy rekutrencyjnie liczyc na nowych z redukowanych danych zaczyna sie rozgalezianie
                     }
                 }
@@ -99,7 +99,7 @@ namespace ATSP
         /// <param name="path"> sciezka</param>
         /// <param name="length"> dlugosc</param>
         /// <param name="elapsedTime">Czas wykonania</param>
-        private void PrintResult(List<int> path, int length, double elapsedTime) => Console.WriteLine($"Scieżka: {string.Join(" ", path)}\t\t" + 
+        private static void PrintResult(List<int> path, int length, double elapsedTime) => Console.WriteLine($"Scieżka: {string.Join(" ", path)}\t\t" + 
             $"Odległość: {length}.\tCzas potrzebny do wykonania: {elapsedTime}(ms)");
 
     }

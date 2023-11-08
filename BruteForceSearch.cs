@@ -4,10 +4,10 @@ namespace ATSP
 {
     class BruteForceSearch
     {
-        private Matrix _matrix;
-        private int _vertex;
-        private int[] _permutation;
-        private int[] _bestPermutation;
+        private readonly Matrix _matrix;
+        private readonly int _vertex;
+        private readonly int[] _permutation;
+        private readonly int[] _bestPermutation;
         private int _minPathLength;
         /// <summary>
         /// Konstruktor tworzący objekt umożliwiający zastosowanie algorytmu przeglądu zupełnego
@@ -18,7 +18,7 @@ namespace ATSP
         {
             _matrix = matrix;
             _vertex = vertex;
-            List<int> permutation = new List<int>();
+            List<int> permutation = new();
             for (int i = 0; i < _matrix.Size; i++)
             {
                 if (i != _vertex)
@@ -135,7 +135,7 @@ namespace ATSP
         /// </summary>
         /// <param name="a"> Pierwszy element do zamiany </param>
         /// <param name="b"> Drugi element do zamiany</param>
-        private void Swap(ref int a, ref int b)
+        private static void Swap(ref int a, ref int b)
         {
             (a, b) = (b, a);
         }
